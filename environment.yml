@@ -1,0 +1,13 @@
+name: radio_stats
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - matplotlib
+  - scikit-learn
+  - tqdm
+  - pip
+  - pip:
+    - -e .

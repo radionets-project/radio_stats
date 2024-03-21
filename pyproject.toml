@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "radio_stats"
+authors = [
+    {name = "Christian Arauner", email = "christian.arauner@tu-dortmund.de"},
+]
+description = "Package to analyze images of radio galaxies"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/radionets-project/radio_stats"
+
+[options]
+install_requires = [
+    "numpy",
+    "matplotlib",
+    "scikit-learn",
+    "tqdm",
+]
