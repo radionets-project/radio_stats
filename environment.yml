@@ -11,3 +11,4 @@ dependencies:
   - pip
   - pip:
     - -e .
+    - -e git+https://github.com/keflavich/gaussfitter.git#egg=gaussfitter
