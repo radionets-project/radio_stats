@@ -60,7 +60,6 @@ def check_termination(
         return False, end_msg
     return True, "go on"
 
-
 def fit_gaussians(
     _image,
     verbose=False,
@@ -98,7 +97,7 @@ def fit_gaussians(
         work_img[work_img < 0] = 0
         parameters.append(params)
         pursue, end_msg = check_termination(
-            params=parameters,
+            params=params,
             image=image,
             work_img=work_img,
             iteration=i,
