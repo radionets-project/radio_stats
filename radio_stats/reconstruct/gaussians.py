@@ -1,7 +1,7 @@
 import numpy as np
 from gaussfitter import twodgaussian
 
-def reconstruct_gauss(parameters : list, shape : tuple, **kwargs)-> np.NDArray:
+def reconstruct_gauss(parameters : list, shape : tuple, **kwargs)-> np.ndarray:
     '''
     Generate an image out of parameters for gaussians.
 
@@ -18,7 +18,7 @@ def reconstruct_gauss(parameters : list, shape : tuple, **kwargs)-> np.NDArray:
     
     Returns
     -------
-    summed_gaussian : np.NDArray
+    summed_gaussian : np.ndarray
         Image consisting of the sum of individual gaussians
     '''
     parameters = np.array(parameters)
