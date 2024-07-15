@@ -24,7 +24,7 @@ def reconstruct_gauss(parameters : list, shape : tuple, **kwargs)-> np.ndarray:
     parameters = np.array(parameters)
     if len(parameters.shape) == 1:
         parameters = [parameters]
-    peak = np.floor_divide(shape)
+    peak = np.floor_divide(shape, 2)
     gaussians = []
     for params in parameters:
         if np.all(params == 0):
