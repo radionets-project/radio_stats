@@ -60,6 +60,7 @@ def check_termination(
         return False, end_msg
     return True, "go on"
 
+
 def fit_gaussians(
     _image,
     verbose=False,
