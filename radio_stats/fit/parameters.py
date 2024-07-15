@@ -4,7 +4,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-def fit_lin(_parameters) -> tuple[np.ndarray, np.ndarray]:
+def fit_lin(_parameters, **kwargs) -> tuple[np.ndarray, np.ndarray]:
     """
     Calculate parameters and errors of linear regression for intensity and brightness of fitted
     gaussians.
@@ -14,6 +14,9 @@ def fit_lin(_parameters) -> tuple[np.ndarray, np.ndarray]:
     _parameters : array_like
         Parameters to be fitted
 
+    kwargs
+        Keyword arguments for reconstruct_gauss
+        
     Returns
     -------
     params : np.ndarray
@@ -23,15 +26,15 @@ def fit_lin(_parameters) -> tuple[np.ndarray, np.ndarray]:
         Errors of the fitted parameters
     """
     try:
-        _parameters[np.argwhere(np.abs(_parameters[:, 2:4]) > 1024)[:, 0], 0] = 0
-        parameters = _parameters[: np.min(np.argwhere(_parameters[:, 0] == 0))]
+        _parameters[np.argwhere(np.abs(_parameters[:, 2:4]) > 1024)[:, 0], 1] = 0
+        parameters = _parameters[: np.min(np.argwhere(_parameters[:, 1] == 0))]
     except ValueError:
         parameters = _parameters
     # if only one point is fittet, we can't fit a x1 function
     if parameters.shape[0] <= 1:
         return np.array([-np.inf, -np.inf]), np.array([-np.inf, -np.inf])
 
-    image = reconstruct_gauss(parameters, (1024, 1024))
+    image = reconstruct_gauss(parameters, (1024, 1024), **kwargs)
 
     distances = calculate_distances(parameters)
 
