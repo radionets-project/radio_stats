@@ -3,7 +3,7 @@ from gaussfitter import twodgaussian
 
 def reconstruct_gauss(parameters : list, shape : tuple, **kwargs)-> np.ndarray:
     '''
-    Generate an image out of parameters for gaussians.
+    Generate a centered image out of parameters for gaussians.
 
     Parameters
     ----------
