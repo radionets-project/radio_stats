@@ -9,6 +9,9 @@
 radionets/simulations/test_data
 examples/example_data/
 
+# pip pullable dependencies
+src
+
 #evaluation results
 */results
 results/

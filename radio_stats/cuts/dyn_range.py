@@ -84,8 +84,8 @@ def plot_boxes(img, boxes, axis=None, **kwargs):
         Red -> box not used, Green -> box used
     """
     row = boxes.shape[0]
-    size = box_size(img, row**2)
-    if axis == None:
+    size = box_size(img, row ** 2)
+    if axis is None:
         fig, axis = plt.subplots(1, 1)
     plot = axis.imshow(img, interpolation="none", **kwargs)
     color = np.zeros(boxes.shape, dtype=str)
@@ -120,7 +120,7 @@ def calc_rms_boxes(img, boxes):
         If the source is inside one box, the rms is set to -1.
     """
     row = boxes.shape[0]
-    size = box_size(img, row**2)
+    size = box_size(img, row ** 2)
     rms_boxes = -np.ones(boxes.shape)
     for j in range(boxes.shape[0]):
         for k in range(boxes.shape[1]):
