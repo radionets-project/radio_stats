@@ -48,12 +48,12 @@ def calculate_offset(parameters, image) -> tuple[int, int]:
     x,y : int
         Offset for (x,y) axis
     """
-    positions = parameters[:, 2:4].T
+    positions = parameters[:, 2:4]
 
-    offset = np.argwhere(image == image.max())[0] - parameters[0, 2:4]
-    pos_offset = positions + offset[::-1, np.newaxis]
+    offset = np.argwhere(image == image.max())[0] - positions[0]
+    pos_offset = positions + offset
 
-    x = np.round(pos_offset.data).astype(int)[0]
-    y = np.round(pos_offset.data).astype(int)[1]
+    x = np.round(pos_offset).astype(int)[:,0]
+    y = np.round(pos_offset).astype(int)[:,1]
 
     return x, y

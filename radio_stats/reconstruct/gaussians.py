@@ -28,6 +28,7 @@ def reconstruct_gauss(parameters: list, shape: tuple, **kwargs) -> np.ndarray:
     peak = np.floor_divide(shape, 2)
     gaussians = []
     for params in parameters:
+        params[2:4] += int(shape[0]/2)
         if np.all(params == 0):
             continue
         gaussians.append(twodgaussian(params, **kwargs)(*np.indices(shape)))
@@ -38,6 +39,8 @@ def reconstruct_gauss(parameters: list, shape: tuple, **kwargs) -> np.ndarray:
         summed_gaussian = gaussians.sum(axis=0)
 
     difference = peak - np.argwhere(summed_gaussian == np.max(summed_gaussian))[0]
+
+    # difference -= int(shape[0]/2)
 
     summed_gaussian = np.roll(summed_gaussian, difference, axis=(0, 1))
 
