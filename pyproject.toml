@@ -22,10 +22,11 @@ install_requires = [
     "matplotlib",
     "scikit-learn",
     "tqdm",
+    "gaussfitter@git+https://github.com/keflavich/gaussfitter"
 ]
 
 [tool.setuptools_scm]
-write_to = "radiotools/_version.py"
+write_to = "radio_stats/_version.py"
 
 [tool.setuptools.packages.find]
 where = ["."]
