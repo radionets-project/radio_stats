@@ -1,9 +1,16 @@
 import numpy as np
+from numpy.typing import ArrayLike
 from sklearn.cluster import DBSCAN
 from tqdm import tqdm
 
 
-def dbscan_clean(_images, max_groups=5, min_brightness=0.05, eps=5, **kwargs):
+def dbscan_clean(
+    _images: ArrayLike,
+    max_groups: int = 5,
+    min_brightness: float = 0.05,
+    eps: float = 5,
+    **kwargs,
+):
     """
     Clean a pre-cleaned radio image.
 
@@ -52,6 +59,7 @@ def dbscan_clean(_images, max_groups=5, min_brightness=0.05, eps=5, **kwargs):
         brightnesses = []
         for labl in index:
             brightnesses.append(np.sum(intensities[labels == labl]))
+
         brightnesses = np.array(brightnesses)
 
         brightness_mask = np.isin(

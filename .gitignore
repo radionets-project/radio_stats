@@ -1,3 +1,7 @@
+# version from setuptools
+radio_stats/_version_cache.py
+radio_stats/_version.py
+
 # Jupyter Notebooks
 .ipynb_checkpoints
 *.ipynb
@@ -50,3 +54,5 @@ dist/
 radionets/dl_framework/values.yaml
 *.csv
 *.swp
+
+.ruff_cache
