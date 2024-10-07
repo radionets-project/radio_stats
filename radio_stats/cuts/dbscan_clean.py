@@ -3,7 +3,7 @@ from sklearn.cluster import DBSCAN
 from tqdm import tqdm
 
 
-def dbscan_clean(_images, max_groups=5, min_brightness=0.05, eps=5, **kwargs):
+def dbscan_clean(_images, max_groups=5, min_brightness=0.05, eps=5, verbose=False, **kwargs):
     """
     Clean a pre-cleaned radio image.
 
@@ -36,7 +36,10 @@ def dbscan_clean(_images, max_groups=5, min_brightness=0.05, eps=5, **kwargs):
     if not is_list:
         images = [images]
 
-    for img in tqdm(images):
+    if verbose:
+        images = tqdm(images)
+
+    for img in images:
         points = np.argwhere(img)
 
         clusters = DBSCAN(eps, **kwargs).fit(points)
