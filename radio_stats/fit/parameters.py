@@ -1,9 +1,11 @@
 import numpy as np
 from numpy.typing import ArrayLike
 from scipy.optimize import curve_fit
+from sklearn.decomposition import PCA
 
 from radio_stats.reconstruct import reconstruct_gauss
 from radio_stats.stats import calculate_distances, calculate_offset
+from radio_stats.cuts import rms_cut
 
 
 def fit_lin(
@@ -67,3 +69,51 @@ def fit_lin(
         errors = np.array([0, 0])
 
     return params, errors
+
+def check_components(parameters, lim_xyrel=(4/5, 4/3), delta_angle=30):
+    if len(parameters.shape) == 1:
+        return parameters
+    elif len(parameters) <= 2:
+        return parameters
+
+    delta_angle = np.deg2rad(delta_angle)
+
+    img_pca = PCA().fit(parameters[:,2:4])
+
+    def angle_difference(parameter, img_pca):
+        img = rms_cut(reconstruct_gauss(parameter, (1024, 1024)), 2)
+        points = np.argwhere(img)[:,::-1]
+        points -= np.mean(points, axis=0, dtype=int)
+
+        pca = PCA().fit(points)
+
+        return np.arccos(np.dot(pca.components_[0], img_pca.components_[0])/(np.linalg.norm(pca.components_[0]) * np.linalg.norm(img_pca.components_[0])))
+
+    angle_diff = np.array([angle_difference(params, img_pca) for params in parameters])
+
+    xyrel = parameters[:,4] / parameters[:,5]
+
+    dismiss = np.zeros([len(parameters), 2], dtype=bool)
+    for idx in range(len(parameters)):
+        if not np.all([xyrel[idx] > lim_xyrel[0], xyrel[idx] < lim_xyrel[1]]):
+            dismiss[idx, 0] = True
+        if not np.any([angle_diff[idx] < delta_angle, angle_diff[idx] > np.pi - delta_angle]):
+            dismiss[idx, 1] = True
+        # override if to narrow:
+        if np.any([xyrel[idx] > 6, xyrel[idx] < 1/6]):
+            dismiss[idx, 0] = True
+            dismiss[idx, 1] = True
+        # keep if enough flux
+        if parameters[idx, 1] / parameters[0, 1] > 0.05:
+            dismiss[idx, 0] = False            
+            dismiss[idx, 1] = False
+
+
+    cut_parameters = np.delete(parameters, np.argwhere(dismiss[:, 0] * dismiss[:, 1]).T[0], axis=0)
+    try:
+        if not np.all(cut_parameters[0] == parameters[0]):
+            cut_parameters = np.insert(cut_parameters, 0, parameters[0], axis=0)
+    except IndexError:
+        cut_parameters = parameters[0]
+
+    return cut_parameters

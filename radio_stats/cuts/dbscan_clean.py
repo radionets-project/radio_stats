@@ -9,6 +9,7 @@ def dbscan_clean(
     max_groups: int = 5,
     min_brightness: float = 0.05,
     eps: float = 5,
+    verbose: bool = False,
     **kwargs,
 ):
     """
@@ -43,7 +44,10 @@ def dbscan_clean(
     if not is_list:
         images = [images]
 
-    for img in tqdm(images):
+    if verbose:
+        images = tqdm(images)
+
+    for img in images:
         points = np.argwhere(img)
 
         clusters = DBSCAN(eps, **kwargs).fit(points)
