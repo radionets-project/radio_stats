@@ -135,7 +135,7 @@ def calc_rms_boxes(img, boxes):
     return rms_boxes
 
 
-def rms_cut(_img, sigma=3, **kwargs):
+def rms_cut(_img, sigma=3, verbose=False, **kwargs):
     """Cuts an image using the rms.
         All values below the mean of the rms times sigma are set to zero.
 
@@ -159,7 +159,10 @@ def rms_cut(_img, sigma=3, **kwargs):
         return img
     else:
         cut_img = []
-        for pic in tqdm(img):
+        if verbose:
+            img = tqdm(img)
+            
+        for pic in img:
             ranges = calc_rms_boxes(pic, check_validity(pic, **kwargs))
             range_img = np.mean(ranges[ranges >= 0])
             pic[pic < sigma * range_img] = 0
