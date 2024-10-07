@@ -25,8 +25,11 @@ def reconstruct_gauss(parameters: list, shape: tuple, verbose=False, **kwargs) -
     parameters = np.array(parameters)
     if len(parameters.shape) == 1:
         parameters = [parameters]
+
     peak = np.floor_divide(shape, 2)
+
     gaussians = []
+    
     summed_gaussian = np.zeros(shape)
     if verbose:
         from tqdm import tqdm
@@ -41,9 +44,6 @@ def reconstruct_gauss(parameters: list, shape: tuple, verbose=False, **kwargs) -
         summed_gaussian += twodgaussian(params, **kwargs)(*np.indices(shape))
 
     difference = peak - np.argwhere(summed_gaussian == np.max(summed_gaussian))[0]
-
-    # difference -= int(shape[0]/2)
-
     summed_gaussian = np.roll(summed_gaussian, difference, axis=(0, 1))
 
     return summed_gaussian

@@ -1,14 +1,14 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm import tqdm
 
 
-def box_size(img, amount_boxes):
+def box_size(img: np.ndarray, amount_boxes: int) -> int:
     """Calculates the edge length of the calculation boxes.
 
     Parameters
     ----------
-    img : 2d np.array
+    img : np.ndarray, shape(N,M)
         Image to be analyzed.
     amount_boxes : int
         Amount of the boxes to be calculated.
@@ -24,7 +24,9 @@ def box_size(img, amount_boxes):
     return int(img.shape[0] / np.sqrt(amount_boxes))
 
 
-def check_validity(img, amount_boxes=36, threshold=1e-3):
+def check_validity(
+    img: np.ndarray, amount_boxes: int = 36, threshold: float = 1e-3
+) -> np.ndarray:
     """Checks if the source is inside of the drawn boxes.
         If the source is inside the box it will be returned as False,
         otherwise as True.
@@ -33,7 +35,7 @@ def check_validity(img, amount_boxes=36, threshold=1e-3):
 
     Parameters
     ----------
-    img : 2d np.array
+    img : np.ndarray, shape(M,N)
         Image to be analyzed
     amount_boxes : int, default: 36
         Amount of the boxes to be calculated.
@@ -43,7 +45,7 @@ def check_validity(img, amount_boxes=36, threshold=1e-3):
 
     Returns
     -------
-    use_box : 2d np.array
+    use_box : np.ndarray, shape(N,M)
         2d array of the usability of the boxes.
         If the box can be used, eg. no source in box, it will return True,
         otherwise False.
@@ -51,6 +53,7 @@ def check_validity(img, amount_boxes=36, threshold=1e-3):
     size = box_size(img, amount_boxes)
     row = int(np.sqrt(amount_boxes))
     use_box = np.zeros([row, row], dtype=bool)
+
     for j in range(row):
         for k in range(row):
             if np.any(
@@ -59,21 +62,23 @@ def check_validity(img, amount_boxes=36, threshold=1e-3):
                 use_box[j, k] = False
             else:
                 use_box[j, k] = True
+
     if np.sum(use_box) < row:
         use_box = check_validity(img, amount_boxes, threshold * 2)
+
     return use_box
 
 
-def plot_boxes(img, boxes, axis=None, **kwargs):
-    """Plots the boxes ontop of the original image.
+def plot_boxes(img: np.ndarray, boxes: np.ndarray, axis=None, **kwargs):
+    """Plots the boxes on top of the original image.
 
     Parameters
     ----------
-    img : 2d np.array
+    img : np.ndarray, shape(N,M)
         Image to be analyzed
-    boxes : 2d np.array
+    boxes : np.ndarray, shape(N,M)
         2d array boolean of the usability of the boxes.
-    axis : `~matplotlib.axes.Axes`, optinal
+    axis : `~matplotlib.axes.Axes`, optional
         Axes on whick the plot should be drawn.
         If None a new figure will be created.
 
@@ -84,7 +89,7 @@ def plot_boxes(img, boxes, axis=None, **kwargs):
         Red -> box not used, Green -> box used
     """
     row = boxes.shape[0]
-    size = box_size(img, row ** 2)
+    size = box_size(img, row**2)
     if axis is None:
         fig, axis = plt.subplots(1, 1)
     plot = axis.imshow(img, interpolation="none", **kwargs)
@@ -103,14 +108,14 @@ def plot_boxes(img, boxes, axis=None, **kwargs):
     return plot
 
 
-def calc_rms_boxes(img, boxes):
+def calc_rms_boxes(img: np.ndarray, boxes: np.ndarray) -> np.ndarray:
     """Calculates the root mean square of the boxes.
 
     Parameters
     ----------
-    img : 2d np.array
+    img : np.ndarray, shape(N,M)
         Image to be analyzed
-    boxes : 2d np.array
+    boxes : np.ndarray, shape(N,M)
         2d array boolean of the usability of the boxes.
 
     Returns
@@ -120,8 +125,9 @@ def calc_rms_boxes(img, boxes):
         If the source is inside one box, the rms is set to -1.
     """
     row = boxes.shape[0]
-    size = box_size(img, row ** 2)
+    size = box_size(img, row**2)
     rms_boxes = -np.ones(boxes.shape)
+
     for j in range(boxes.shape[0]):
         for k in range(boxes.shape[1]):
             if not boxes[k, j]:
@@ -132,31 +138,34 @@ def calc_rms_boxes(img, boxes):
                         img[k * size : (k + 1) * size, j * size : (j + 1) * size] ** 2
                     )
                 )
+
     return rms_boxes
 
 
-def rms_cut(_img, sigma=3, verbose=False, **kwargs):
+def rms_cut(img: np.ndarray, sigma: float = 3, verbose: bool = False, **kwargs):
     """Cuts an image using the rms.
         All values below the mean of the rms times sigma are set to zero.
 
     Parameters
     ----------
-    img : 2d np.array or array of 2d arrays
+    img : np.ndarray, shape(N,M) or array of 2d arrays
         Images  to be analyzed
     sigma : float, default: 3.0
         Multiplier for the cut value.
 
     Reurns
     ------
-    cut_img : 2d np.array or array of 2d arrays
-        Cutted images.
+    cut_img : np.ndarray, shape(N,M) or array of 2d arrays
+        Cut images.
     """
-    img = np.copy(_img)
-    if len(img.shape) == 2:
-        ranges = calc_rms_boxes(img, check_validity(img, **kwargs))
+    _img = np.copy(img)
+    if len(_img.shape) == 2:
+        ranges = calc_rms_boxes(_img, check_validity(_img, **kwargs))
         range_img = np.mean(ranges[ranges >= 0])
-        img[img < sigma * range_img] = 0
-        return img
+
+        _img[_img < sigma * range_img] = 0
+
+        return _img
     else:
         cut_img = []
         if verbose:
@@ -165,6 +174,8 @@ def rms_cut(_img, sigma=3, verbose=False, **kwargs):
         for pic in img:
             ranges = calc_rms_boxes(pic, check_validity(pic, **kwargs))
             range_img = np.mean(ranges[ranges >= 0])
+
             pic[pic < sigma * range_img] = 0
             cut_img.append(pic)
+
         return np.array(cut_img)
