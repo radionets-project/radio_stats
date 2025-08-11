@@ -170,7 +170,7 @@ def rms_cut(img: np.ndarray, sigma: float = 3, verbose: bool = False, **kwargs):
         cut_img = []
         if verbose:
             img = tqdm(img)
-            
+
         for pic in img:
             ranges = calc_rms_boxes(pic, check_validity(pic, **kwargs))
             range_img = np.mean(ranges[ranges >= 0])
