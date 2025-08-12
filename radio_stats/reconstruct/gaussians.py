@@ -30,8 +30,6 @@ def reconstruct_gauss(
 
     peak = np.floor_divide(shape, 2)
 
-    gaussians = []
-
     summed_gaussian = np.zeros(shape)
     if verbose:
         from tqdm import tqdm
