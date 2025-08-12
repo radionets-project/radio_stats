@@ -79,7 +79,7 @@ def plot_boxes(img: np.ndarray, boxes: np.ndarray, axis=None, **kwargs):
     boxes : np.ndarray, shape(N,M)
         2d array boolean of the usability of the boxes.
     axis : `~matplotlib.axes.Axes`, optional
-        Axes on whick the plot should be drawn.
+        Axes on which the plot should be drawn.
         If None a new figure will be created.
 
     Returns
@@ -153,8 +153,8 @@ def rms_cut(img: np.ndarray, sigma: float = 3, verbose: bool = False, **kwargs):
     sigma : float, default: 3.0
         Multiplier for the cut value.
 
-    Reurns
-    ------
+    Returns
+    -------
     cut_img : np.ndarray, shape(N,M) or array of 2d arrays
         Cut images.
     """
