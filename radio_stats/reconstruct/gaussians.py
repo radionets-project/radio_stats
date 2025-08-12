@@ -2,7 +2,9 @@ import numpy as np
 from gaussfitter import twodgaussian
 
 
-def reconstruct_gauss(parameters: list, shape: tuple, verbose=False, **kwargs) -> np.ndarray:
+def reconstruct_gauss(
+    parameters: list, shape: tuple, verbose=False, **kwargs
+) -> np.ndarray:
     """
     Generate a centered image out of parameters for gaussians.
 
@@ -28,17 +30,16 @@ def reconstruct_gauss(parameters: list, shape: tuple, verbose=False, **kwargs) -
 
     peak = np.floor_divide(shape, 2)
 
-    gaussians = []
-    
     summed_gaussian = np.zeros(shape)
     if verbose:
         from tqdm import tqdm
+
         iterator = tqdm(parameters)
     else:
         iterator = parameters
-        
+
     for params in iterator:
-        params[2:4] += int(shape[0]/2)
+        params[2:4] += int(shape[0] / 2)
         if np.all(params == 0):
             continue
         summed_gaussian += twodgaussian(params, **kwargs)(*np.indices(shape))

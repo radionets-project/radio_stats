@@ -88,7 +88,7 @@ def fit_gaussians(
     cut_percentage=1e-2,
     fraction=1,
     hot_start=False,
-    **kwargs
+    **kwargs,
 ):
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     image = _image
@@ -107,11 +107,14 @@ def fit_gaussians(
     for i in iterator:
         if hot_start:
             from gaussfitter import twodgaussian
+
             for params in hot_start[0]:
-                work_img -= hot_start[1] * twodgaussian(params)(*np.indices(work_img.shape))
+                work_img -= hot_start[1] * twodgaussian(params)(
+                    *np.indices(work_img.shape)
+                )
                 work_img[work_img < 0] = 0
                 parameters.append(params)
-            hot_start=False
+            hot_start = False
         # return work_img
         tofit = np.copy(work_img)
         tofit[tofit < cut_percentage * np.amax(tofit)] = 0
@@ -142,5 +145,5 @@ def fit_gaussians(
         )
         if not pursue:
             break
-            
+
     return np.array(parameters), np.array(end_msg)

@@ -18,10 +18,17 @@ def truncate(img, excess=5, symmetrical=True):
         top = np.abs(center[0] - np.max(points[:, 0])) + 1
 
         # Check for negative indices
-        if np.any(np.array([center[0] - bottom - excess,
-                            center[0] + top + excess,
-                            center[1] - left - excess,
-                            center[1] + right + excess]) < 0):
+        if np.any(
+            np.array(
+                [
+                    center[0] - bottom - excess,
+                    center[0] + top + excess,
+                    center[1] - left - excess,
+                    center[1] + right + excess,
+                ]
+            )
+            < 0
+        ):
             excess = 0
 
         if symmetrical:
