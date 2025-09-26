@@ -62,6 +62,9 @@ include = ["src/radio_stats"]
 [tool.hatch.build.targets.wheel.sources]
 "src/radio_stats" = "radio_stats"
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.coverage.run]
 omit = [
   "src/radio_stats/version.py",
