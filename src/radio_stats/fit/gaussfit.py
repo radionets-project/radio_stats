@@ -99,10 +99,7 @@ def fit_gaussians(
     work_img = np.copy(image)
     start_time = time.time()
 
-    if verbose:
-        iterator = tqdm(range(max_amount))
-    else:
-        iterator = range(max_amount)
+    iterator = tqdm(range(max_amount)) if verbose else range(max_amount)
 
     for i in iterator:
         if hot_start:
