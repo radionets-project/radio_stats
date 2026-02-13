@@ -2,8 +2,8 @@ import numpy as np
 
 
 def calculate_distances(parameters: list, order=None) -> np.ndarray:
-    """
-    Calculates the distances of all source centers to the first parameter
+    """Calculates the distances of all source centers
+    to the first parameter
 
     Parameters
     ----------
@@ -35,8 +35,8 @@ def calculate_distances(parameters: list, order=None) -> np.ndarray:
 
 
 def calculate_offset(parameters, image) -> tuple[int, int]:
-    """
-    Calculates the offset of the center of fitted gaussians to the brightest pixel in image.
+    """Calculates the offset of the center of fitted gaussians
+    to the brightest pixel in image.
 
     Parameters
     ----------
