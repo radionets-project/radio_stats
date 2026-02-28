@@ -1,23 +1,36 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm[toml]>=8"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "radio_stats"
-authors = [
-    {name = "Christian Arauner", email = "christian.arauner@tu-dortmund.de"},
-]
+dynamic = ["version"]
 description = "Package to analyze images of radio galaxies"
 readme = "README.md"
-requires-python = ">=3.10"
+authors = [
+  { name = "radionets Developers" },
+]
+maintainers = [
+  { name = "Christian Arauner", email = "christian.arauner@tu-dortmund.de" },
+]
+
 license = { text = "MIT" }
-dynamic = ["version"]
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Development Status :: 4 - Beta",
+]
 
-[project.urls]
-Repository = "https://github.com/radionets-project/radio_stats"
+requires-python = ">=3.11"
 
-[options]
-install_requires = [
+dependencies = [
     "numpy",
     "matplotlib",
     "scikit-learn",
@@ -25,27 +38,109 @@ install_requires = [
     "gaussfitter@git+https://github.com/keflavich/gaussfitter"
 ]
 
-[tool.setuptools_scm]
-write_to = "radio_stats/_version.py"
+[project.urls]
+Homepage = "https://github.com/radionets-project"
+Repository = "https://github.com/radionets-project/radio_stats"
 
-[tool.setuptools.packages.find]
-where = ["."]
+
+[dependency-groups]
+dev = [
+  "ipython>=9.4.0",
+  "jupyter>=1.1.1",
+  "pre-commit>=4.2.0",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/radio_stats/_version.py"
+
+[tool.hatch.build.targets.wheel]
+include = ["src/radio_stats"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src/radio_stats" = "radio_stats"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.coverage.run]
+omit = [
+  "src/radio_stats/version.py",
+  "src/radio_stats/_version.py",
+  "docs/*",
+]
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.pytest.ini_options]
+addopts = "--verbose"
+
+[tool.towncrier]
+    package = "radio_stats"
+    directory = "docs/changes"
+    filename = "CHANGES.rst"
+    template = "docs/changes/template.rst"
+    # let towncrier create proper links to the merged PR
+    issue_format = "`#{issue} <https://github.com/radionets-project/radio_stats/pull/{issue}>`__"
+
+    [tool.towncrier.fragment.feature]
+        name = "New Features"
+        showcontent = true
+
+    [tool.towncrier.fragment.bugfix]
+        name = "Bug Fixes"
+        showcontent = true
+
+    [tool.towncrier.fragment.api]
+        name = "API Changes"
+        showcontent = true
+
+    [tool.towncrier.fragment.datamodel]
+        name = "Data Model Changes"
+        showcontent = true
+
+    [tool.towncrier.fragment.optimization]
+        name = "Refactoring and Optimization"
+        showcontent = true
+
+    [tool.towncrier.fragment.maintenance]
+        name = "Maintenance"
+        showcontent = true
+
+    [[tool.towncrier.section]]
+        name = ""
+        path = ""
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 line-length = 88
 
 [tool.ruff.lint]
 extend-select = [
-    "I", # isort
+  "I",  # isort
+  "E", # pycodestyle
+  "F", # Pyflakes
+  "UP", # pyupgrade
+  "B", # flake8-bugbear
+  "SIM", # flake8-simplify
 ]
-ignore = []
+ignore = ["B905"]
 
 fixable = ["ALL"]
 unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+"examples/**" = ["I"]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 skip-magic-trailing-comma = false
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["radio_stats"]
