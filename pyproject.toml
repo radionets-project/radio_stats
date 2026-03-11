@@ -13,17 +13,16 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 dynamic = ["version"]
 
-[project.urls]
-Repository = "https://github.com/radionets-project/radio_stats"
-
-[options]
-install_requires = [
+dependencies = [
     "numpy",
     "matplotlib",
     "scikit-learn",
     "tqdm",
     "gaussfitter@git+https://github.com/keflavich/gaussfitter"
 ]
+
+[project.urls]
+Repository = "https://github.com/radionets-project/radio_stats"
 
 [tool.setuptools_scm]
 write_to = "radio_stats/_version.py"
