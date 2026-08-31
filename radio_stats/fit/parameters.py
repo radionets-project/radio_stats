@@ -72,9 +72,7 @@ def fit_lin(
 
 
 def check_components(parameters, lim_xyrel=(4 / 5, 4 / 3), delta_angle=30):
-    if len(parameters.shape) == 1:
-        return parameters
-    elif len(parameters) <= 2:
+    if len(parameters.shape) == 1 or len(parameters) <= 2:
         return parameters
 
     delta_angle = np.deg2rad(delta_angle)
